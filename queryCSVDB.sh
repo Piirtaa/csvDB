@@ -383,13 +383,13 @@ shift
 
 #the command switches
 case "$SWITCH" in
-	fields)
+	-fields)
 			getAllFields 
 			;;
-	values)
+	-values)
 			getAllFieldValues "$1"
 			;;
-	validate)
+	-validate)
 			validateQuery "$@"
 			if [[ ! -z "$LAST_ERROR" ]]; then
 				echo error "$LAST_ERROR"
@@ -397,12 +397,12 @@ case "$SWITCH" in
 				echo valid
 			fi
 			;;
-	query)
+	-query)
 			runQuery "$@"
 			;;
 	*)
-			args=( "fields" "values" "validate" "query" )
-			desc=( "lists all fields" "lists all values for a given field.  eg. values MYFIELD " "validates a query expression. eg. + myField myValueA -> + myField myValueB -> - myFieldB myValueC true" "performs a query.  eg. query + myField myValueA -> + myField myValueB -> - myFieldB myValueC true" )
+			args=( "-fields" "-values" "-validate" "-query" )
+			desc=( "lists all fields" "lists all values for a given field.  eg. -values MYFIELD " "validates a query expression. eg. -validate + myField myValueA _AND_ + myField myValueB _AND_ - myFieldB myValueC true" "performs a query.  eg. -query + myField myValueA _AND_ + myField myValueB _AND_ - myFieldB myValueC true" )
 			echo -e "Usage:\tqueryCSVDB.sh [argument]\n"
 			for ((i=0; i < ${#args[@]}; i++))
 			do
