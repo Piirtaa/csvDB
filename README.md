@@ -8,7 +8,7 @@ The advantages of this type of approach are:
  - Shell only.  No external dependencies.  
  - The dataset one is searching thru can be trivially split up into different file sets, and paralled processed using different shell instances.  The configuration of the splitting being the main variable with regards to achieving performance improvement.  ie. Scaling for read/query performance isn't that hard to do.
  - Since the data is contained in files the typical shell utilities like core-utils, etc. are available to refine queries.
- - Mutation of the underlying records can be reflected in underlying index files with relatively little difficulty.  Additionally it is very conceivable to handle mutations in separate files that could then be merged/overlayed afterwards, thus limiting the size of "critical sections" when concurrent mutations are happening.  Again, scaling performance on writes and not just reads is very conceivable.
+ - Mutation of the underlying records can be reflected in index files with relatively little difficulty.  Additionally it is very conceivable to handle mutations in separate files that could then be merged/overlayed afterwards, thus limiting the size of "critical sections" when concurrent mutations are happening.  Again, scaling performance on writes and not just reads is very conceivable.
  - The processing cost of querying is mostly done once per indexing/loading instead of per query.  Per query costs are in the set operations themselves and can be optimized with external (ie. non-shell) implementations.
  - Simple Design.  The core functionality exists within a few scripts, is not difficult to audit, is conceptually simple, and has a limited number of edges to worry about.
 
