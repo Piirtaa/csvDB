@@ -4,6 +4,11 @@
 
 Since a CSV file is a set of fields data, it is possible to convert this data to files named for each field/value combination (within file system name limitations) consisting of line references to the source CSV.  This has the effect of creating an index file for each field/value, as searching for entries where field "A" has a value of "X" becomes as trivial as dumping the file contents of the file representing the combination of field="A" && value="X".  This conversion also facilitates set operations.  For example, returning the records where field "A"="X" and field "B"="Y" becomes an intersection between 2 files.  This is the premise of csvDB.
 
+The advantages of this type of approach are:
+ - Shell only.  No external dependencies.  
+ - The dataset one is searching thru can be trivially split up into different file sets, and paralled processed using different shell instances.  The configuration of the splitting being the main variable with regards to achieving performance improvement.  ie. Scaling for performance isn't that hard to do.
+ - Since the data is contained in files the typical shell utilities like core-utils, etc. are available to refine queries.
+ - Mutation of the underlying records can be reflected in underlying index files with relatively little difficulty.  Additionally it is very conceivable to handle mutations in separate files that could then be merged/overlayed afterwards, thus limiting the size of "critical sections" when concurrent mutations are happening.  Again, scaling performance on writes and not just reads is very conceivable.
 
 ## Moving Parts:
 
