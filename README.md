@@ -8,53 +8,76 @@ Since a CSV file is a set of fields data, it is possible to convert this data to
 
 ### parseCSVDB.sh
 
-This is the "importer".  This script parses the CSV according to the supplied configuration (which indicates which fields we want to index), and produces files with the naming standard of ` *Field* _._ *Value*.txt `, placing these in the "data" subdirectory of the folder where parseCSVDB.sh exists.  The contents of these files will be lines of *Key* *SourceFile*. 
+This is the "importer".  This script parses the CSV according to the supplied configuration (which indicates which fields we want to index), and produces files with the naming standard of "***{Field}***\_.\_***{Value}***.txt" , placing these in the "data" subdirectory of the folder where parseCSVDB.sh exists.  The contents of these files will be lines of ***{Key} {SourceFile}***, identifying the source record. 
 
-usage:  `./parseCSVDB.sh configFile csvFile`
- - where configFile is a text file containing the mapping information describing csvFile
+#### Usage:  
+`./parseCSVDB.sh pathToMyConfigFile pathToMyCsvFile `
+- where configFile is a text file containing the field mapping information describing the CSV.
  
 #### config file layout:
 
-line 1:  delimiter (must be single character
+line 1:  the csv file delimiter (must be a single character)
 
-line 2:  hasHeaderSwitch (must be "true" if there is a header line in the csvFile.  or any other value to indicate there is no header line)
+line 2:  the hasHeaderSwitch (must be "true" if there is a header line in the csvFile, or any other value to indicate there is no header line)
 
-line 3:  indexPos1 indexPos2 indexPos3 ... (space delimited list of field indices that constitute "the record key")
+line 3:  ***{indexPos1} {indexPos2} {indexPos3}*** ... (space delimited list of field indices that constitute "the record key")
 
-line 4+:  posX fieldName (space delimited integer and string mapping column to field name)
+line 4+:  ***{posX} {fieldName}*** (space delimited integer and string mapping column to field name)
      
       
 ### queryCSVDB.sh
-usage:  
- `./queryCSVDB.sh fields`
-  - lists all indexed fields
-      
- `./queryCSVDB.sh values * myField *`
-  - lists all values indexed for the field named "myField"
-      
- `./queryCSVDB.sh validate * my query *`
-  - validates the supplied query for correct syntax and schema 
-      
- `./queryCSVDB.sh query * my query *`
-  - performs a query against the imported data returning a list of * Key * * SourceFile *
-     
- query syntax:
-  ` * clause * _AND_ * clause * _AND_ * clause * ... `
+
+This is a utility to query the data.  
+
+#### Usage:
+
+##### lists all indexed fields
+
+```
+   ./queryCSVDB.sh -fields
+```   
+
+##### lists all values indexed for the field named "myField"
    
- Where a clause has the syntax: `* operation * * fieldname * * value * (optional switch: -matchOnKey) `
+```
+   ./queryCSVDB.sh -values myField
+```   
+
+##### validates the supplied query for correct syntax and schema 
+ 
+```   
+   ./queryCSVDB.sh -validate myQuery
+```   
+
+##### performs a query against the imported data returning a list of ***{Key} {SourceFile}***
+
+``` 
+   ./queryCSVDB.sh query myQuery
+```   
+
+     
+#### Query syntax:  
+
+***{clauseA}*** _AND_ ***{clauseB}*** _AND_ ***{clauseC}*** ... 
+   
+#### Clause syntax:
+
+***{operation}*** ***{myFieldname}*** ***{myFieldValue}*** (optional:) -matchOnKey 
  
  Operation can be one of:
- ` + ` union 
- ` - ` removal 
- ` N ` intersection
-          
- If the switch ` -matchOnKey ` is provided in a clause it will only use the "key" column in the set operation and not the "key & source" columns.
- This allows for the same keys from different sources to be considered pointing to the same set record as we carry out our set operations. 
-     
- For example:  
- ` + FieldA ValueA _AND_ N FieldB ValueB _AND_ - FieldC ValueC `
  
- will find the set of FieldA/ValueA and intersect this with the set of FieldB/ValueB and remove the set of FieldC/ValueC
+ ***+***  (union) 
+ 
+ ***-***  (remove) 
+ 
+ ***N***  (intersection)
+          
+ If the switch "-matchOnKey" is provided in a clause, the set operation will only consider the "key" column as uniquely identifying a record rather than the default behaviour of "key & source" columns being considered uniquely identifying.  This allows for the same keys from different sources to be considered pointing to the same record as we carry out our set operations. 
+     
+ #### Query Example:  find the set of FieldA/ValueA and intersect this with the set of FieldB/ValueB and remove the set of FieldC/ValueC
+  
+ `+ FieldA ValueA _AND_ N FieldB ValueB _AND_ - FieldC ValueC`
+ 
         
      
       
