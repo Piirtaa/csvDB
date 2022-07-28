@@ -2,9 +2,11 @@
 
 "Relational database"-like functionality on CSV files done entirely in bash.
 
-Since a CSV file is a set of fields data, it is possible to convert this data to files named for each field/value combination (within file system name limitations) consisting of line references to the source CSV.  This has the effect of creating an index file for each field/value, as searching for "entries where field A has a value of X" becomes as trivial as dumping the file contents of the file representing the "field=A"/"value=X" combination.  This conversion also facilitates set operations.  For example, return the records where Field A = X and Field B = Y.  This is the premise of csvDB.
+Since a CSV file is a set of fields data, it is possible to convert this data to files named for each field/value combination (within file system name limitations) consisting of line references to the source CSV.  This has the effect of creating an index file for each field/value, as searching for entries where field "A" has a value of "X" becomes as trivial as dumping the file contents of the file representing the combination of field="A" && value="X".  This conversion also facilitates set operations.  For example, returning the records where field "A"="X" and field "B"="Y" becomes an intersection between 2 files.  This is the premise of csvDB.
+
 
 ## Moving Parts:
+
 
 ### parseCSVDB.sh
 
@@ -24,7 +26,8 @@ line 3:  ***{indexPos1} {indexPos2} {indexPos3}*** ... (space delimited list of 
 
 line 4+:  ***{posX} {fieldName}*** (space delimited integer and string mapping column to field name)
      
-      
+
+
 ### queryCSVDB.sh
 
 This is a utility to query the data.  
