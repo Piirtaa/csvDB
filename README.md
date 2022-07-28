@@ -55,7 +55,7 @@ This is a utility to query the data.
 ##### performs a query against the imported data returning a list of ***{Key} {SourceFile}***
 
 ``` 
-   ./queryCSVDB.sh query myQuery
+   ./queryCSVDB.sh -query myQuery
 ```   
 
      
@@ -77,9 +77,9 @@ This is a utility to query the data.
           
  If the switch "-matchOnKey" is provided in a clause, the set operation will only consider the "key" column as uniquely identifying a record rather than the default behaviour of "key & source" columns being considered uniquely identifying.  This allows for the same keys from different sources to be considered pointing to the same record as we carry out our set operations. 
      
- #### Query Example:  find the set of FieldA/ValueA and intersect this with the set of FieldB/ValueB and remove the set of FieldC/ValueC
+ #### Query Example:  find the set of FieldA/ValueA, and intersect this with the set of FieldB/ValueB, and remove the set of FieldC/ValueC using keys only
   
- `+ FieldA ValueA _AND_ N FieldB ValueB _AND_ - FieldC ValueC`
+ `+ FieldA ValueA _AND_ N FieldB ValueB _AND_ - FieldC ValueC -matchOnKey`
  
         
      
